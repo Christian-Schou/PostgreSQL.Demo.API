@@ -5,7 +5,7 @@
 <br />
 <div align="center">
   <a href="https://christian-schou.dk/">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="img/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Connect PostgreSQL to .NET 6 Web API</h3>
@@ -25,7 +25,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![CQRS using Mediator Demo][product-screenshot]](https://christian-schou.dk/how-to-implement-cqrs-with-mediatr-in-asp-net/m)
+[![Connect PostgreSQL Database to .NET][product-screenshot]](https://blog.christian-schou.dk/connect-postgresql-database-to-dot-net-6/)
 
 I have made this tutorial to show how easy it is to connect a PostgreSQL database to your ASP.NET Core Web Application.
 
@@ -62,4 +62,4 @@ Article about the code: [Connect PostgreSQL to .NET 6 Web API](https://blog.chri
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/chrschou1996/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BH%2BfuudfrTJ2JlAS15tlEiw%3D%3D
-[product-screenshot]: images/featured-image.png
+[product-screenshot]: img/featured-image.png
