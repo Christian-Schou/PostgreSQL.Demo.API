@@ -17,7 +17,7 @@ namespace PostgreSQL.Demo.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase("LibraryDatabase");
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgreSQL"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
