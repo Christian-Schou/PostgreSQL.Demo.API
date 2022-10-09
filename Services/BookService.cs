@@ -26,20 +26,20 @@ namespace PostgreSQL.Demo.API.Services
         /// Create a new book in the database
         /// </summary>
         /// <param name="model">Create book request model</param>
-        void CreateBook(CreateBookRequest model);
+        Task<int> CreateBook(CreateBookRequest model);
 
         /// <summary>
         /// Update a book in the database if the book already exists.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="model"></param>
-        void UpdateBook(int id, UpdateBookRequest model);
+        Task UpdateBook(int id, UpdateBookRequest model);
 
         /// <summary>
         /// Delete a single book in the dabase. Will delete the book if the book exists in the database.
         /// </summary>
         /// <param name="id">Id of the book to delete</param>
-        void DeleteBook(int id);
+        Task DeleteBook(int id);
     }
 
     public class BookService : IBookService
@@ -53,7 +53,7 @@ namespace PostgreSQL.Demo.API.Services
             _mapper = mapper;   
         }
 
-        public async void CreateBook(CreateBookRequest model)
+        public async Task<int> CreateBook(CreateBookRequest model)
         {
             // Validate new book
             if (await _dbContext.Books.AnyAsync(x => x.ISBN13 == model.ISBN13))
@@ -65,9 +65,11 @@ namespace PostgreSQL.Demo.API.Services
             // Save book in database
             _dbContext.Books.Add(book);
             await _dbContext.SaveChangesAsync().ConfigureAwait(true);
+
+            return book.Id;
         }
 
-        public async void DeleteBook(int id)
+        public async Task DeleteBook(int id)
         {
             Book? book = await _getBookById(id);
 
@@ -87,7 +89,7 @@ namespace PostgreSQL.Demo.API.Services
             return await _getBookById(id);
         }
 
-        public async void UpdateBook(int id, UpdateBookRequest model)
+        public async Task UpdateBook(int id, UpdateBookRequest model)
         {
             Book? book = await _getBookById(id);
 

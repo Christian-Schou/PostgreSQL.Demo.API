@@ -39,26 +39,34 @@ namespace PostgreSQL.Demo.API.Controllers
 
         // POST api/<AuthorController>
         [HttpPost]
-        public IActionResult CreateAuthor(CreateAuthorRequest model)
+        public async Task<IActionResult> CreateAuthor(CreateAuthorRequest model)
         {
-            _authorService.CreateAuthor(model);
-            return Ok(new { message = "Author was successfully created in database" });
+            int authorId = await _authorService.CreateAuthor(model);
+
+            if (authorId != 0)
+            {
+                return Ok(new { message = $"Author was successfully created in database with the id {authorId}" });
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, "The author was not created in the database.");
         }
 
         // PUT api/<AuthorController>/5
         [HttpPut("{id}")]
-        public IActionResult UpdateAuthor(int id, UpdateAuthorRequest model)
+        public async Task<IActionResult> UpdateAuthor(int id, UpdateAuthorRequest model)
         {
-            _authorService.UpdateAuthor(id, model);
+            await _authorService.UpdateAuthor(id, model);
             return Ok(new { message = "Author was successfully updated in database" });
+            
         }
 
         // DELETE api/<AuthorController>/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteAuthor(int id)
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
-            _authorService.DeleteAuthor(id);
+            await _authorService.DeleteAuthor(id);
             return Ok(new { message = "Author was successfully deleted in database" });
+
         }
     }
 }

@@ -37,25 +37,31 @@ namespace PostgreSQL.Demo.API.Controllers
 
         // POST api/<BooksController>
         [HttpPost]
-        public IActionResult CreateBook(CreateBookRequest model)
+        public async Task<IActionResult> CreateBook(CreateBookRequest model)
         {
-            _bookService.CreateBook(model);
-            return Ok("The book was successfully added to the database");
+            int book = await _bookService.CreateBook(model);
+
+            if (book != 0)
+            {
+                return Ok("The book was successfully added to the database");
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, "The book was successfully added to the database");
         }
 
         // PUT api/<BooksController>/5
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id, UpdateBookRequest model)
+        public async Task<IActionResult> UpdateBook(int id, UpdateBookRequest model)
         {
-            _bookService.UpdateBook(id, model);
+            await _bookService.UpdateBook(id, model);
             return Ok("The book was successfully updated in the database");
         }
 
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
-            _bookService.DeleteBook(id);
+            await _bookService.DeleteBook(id);
             return Ok("The book was successfully deleted in the database");
         }
     }

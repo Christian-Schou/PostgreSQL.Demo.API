@@ -28,21 +28,21 @@ namespace PostgreSQL.Demo.API.Services
         /// Create a new author in the database
         /// </summary>
         /// <param name="model">Create Author request model</param>
-        void CreateAuthor(CreateAuthorRequest model);
+        Task<int> CreateAuthor(CreateAuthorRequest model);
 
         /// <summary>
         /// Update an author in the database if the author already exists.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="model"></param>
-        void UpdateAuthor(int id, UpdateAuthorRequest model);
+        Task UpdateAuthor(int id, UpdateAuthorRequest model);
 
         /// <summary>
         /// Delete a single author in the dabase. Will delete the author if the author exists in the database.
         /// Cascading is enabled and will delete the authors books from the database at the same time. Use with caution.
         /// </summary>
         /// <param name="id">Id of the author to delete</param>
-        void DeleteAuthor(int id);
+        Task DeleteAuthor(int id);
     }
 
     public class AuthorService : IAuthorService
@@ -56,7 +56,7 @@ namespace PostgreSQL.Demo.API.Services
             _mapper = mapper;
         }
 
-        public async void CreateAuthor(CreateAuthorRequest model)
+        public async Task<int> CreateAuthor(CreateAuthorRequest model)
         {
             // Validate new author
             if (await _dbContext.Authors.AnyAsync(x => x.Name == model.Name))
@@ -68,9 +68,17 @@ namespace PostgreSQL.Demo.API.Services
             // Save Author
             _dbContext.Authors.Add(author);
             await _dbContext.SaveChangesAsync().ConfigureAwait(true);
+
+            if (author != null)
+            {
+                return author.Id; // Author got created
+            }
+
+            return 0;
+            
         }
 
-        public async void DeleteAuthor(int id)
+        public async Task DeleteAuthor(int id)
         {
             Author? author = await _getAuthorById(id);
 
@@ -100,7 +108,7 @@ namespace PostgreSQL.Demo.API.Services
             return await _getAuthorById(id, includeBooks).ConfigureAwait(true);
         }
 
-        public async void UpdateAuthor(int id, UpdateAuthorRequest model)
+        public async Task UpdateAuthor(int id, UpdateAuthorRequest model)
         {
             Author? author = await _getAuthorById(id).ConfigureAwait(true);
 
@@ -111,7 +119,8 @@ namespace PostgreSQL.Demo.API.Services
             // copy model to author and save
             _mapper.Map(model, author);
             _dbContext.Authors.Update(author);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(true);
+            await _dbContext.SaveChangesAsync();
+
         }
 
         /// <summary>
